@@ -17,8 +17,7 @@ def rabin_karp_search(text, pattern, prime=101):
         return 0
     
     d = 256
-
-    # Calcula o valor de h = d^(m-1) % prime
+    
     h = 1
     for i in range(m-1):
         h = (h * d) % prime
@@ -35,7 +34,7 @@ def rabin_karp_search(text, pattern, prime=101):
                 occurrences += 1
         
         if i < n - m:
-            t_hash = (d*(t_hash - ord(text[i])*h) + ord(text[i+m])) % prime
+            t_hash = (d * (t_hash - ord(text[i]) * h) + ord(text[i + m])) % prime
             if t_hash < 0:
                 t_hash += prime
 
@@ -46,24 +45,35 @@ def load_book(filename):
         return file.read()
 
 filename = 'frankenstein.txt'
-pattern = "creature"
 
-# Carrega o livro
+patterns = [                
+    "frankenstein",                              
+    "no man on earth could so completely",     
+    "Will you smile"  
+    "Everyone loved Elizabeth",
+    "Every minute",
+    "I am happy",
+    "“to have gained a disciple; and if your application equals your ability, I have no doubt of your success. Chemistry is that branch of natural philosophy in which the greatest improvements have been and may be made; it is on that account that I have made it my peculiar study; but at the same time, I have not neglected the other branches of science. A man would make but a very sorry chemist if he attended to that department of human knowledge alone. If your wish is to become really a man of science and not merely a petty experimentalist, I should advise you to apply to every branch of natural philosophy, including mathematics.”"
+]
+
 book_text = load_book(filename)
 
 book_text_lower = book_text.lower()
-pattern_lower = pattern.lower()
-
-start_naive = time.time()
-occurrences_naive = naive_search(book_text_lower, pattern_lower)
-time_naive = time.time() - start_naive
-
-start_rk = time.time()
-occurrences_rk = rabin_karp_search(book_text_lower, pattern_lower)
-time_rk = time.time() - start_rk
 
 print("Resultados da Busca:")
 print("---------------------")
-print(f"Trecho buscado: '{pattern}'")
-print(f"Ocorrências (Busca Ingênua): {occurrences_naive} | Tempo: {time_naive:.6f} segundos")
-print(f"Ocorrências (Rabin-Karp):   {occurrences_rk} | Tempo: {time_rk:.6f} segundos")
+
+for pattern in patterns:
+    pattern_lower = pattern.lower()
+
+    start_naive = time.time()
+    occurrences_naive = naive_search(book_text_lower, pattern_lower)
+    time_naive = time.time() - start_naive
+
+    start_rk = time.time()
+    occurrences_rk = rabin_karp_search(book_text_lower, pattern_lower)
+    time_rk = time.time() - start_rk
+
+    print(f"\nTrecho buscado: '{pattern}'")
+    print(f"Ocorrências (Busca Ingênua): {occurrences_naive} | Tempo: {time_naive:.6f} segundos")
+    print(f"Ocorrências (Rabin-Karp):   {occurrences_rk} | Tempo: {time_rk:.6f} segundos")
